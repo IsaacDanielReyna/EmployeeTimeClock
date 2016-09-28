@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_timeclock"
+            android:icon="@drawable/ic_update_black_24px"
+            android:title="Time Clock" />
+        <item
+            android:id="@+id/nav_timesheet"
+            android:icon="@drawable/ic_assignment_black_24px"
+            android:title="Time Sheets" />
+        <item
+            android:id="@+id/nav_company"
+            android:icon="@drawable/ic_business_black_24px"
+            android:title="Company" />6
+
+    </group>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/ic_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Log out" />
+        </menu>
+    </item>
+
+</menu>
