@@ -12,23 +12,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.isaacreyna.employeetimeclock.interfaces.SystemAPI;
+import com.isaacreyna.employeetimeclock.interfaces.Login;
+import com.isaacreyna.employeetimeclock.interfaces.Service;
 import com.isaacreyna.employeetimeclock.interfaces.User;
-import com.isaacreyna.employeetimeclock.interfaces.UserAPI;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     public final String TAG = "APISYSTEM";
     public User user = new User();
+    public Login login = new Login();
     private SharedPreferences Settings;
 
     @Override
@@ -63,49 +60,37 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: username and password validation (too short, missing symbols, etc.)
         login(username, password);
     }
-
-    public void login(String username, String password) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserAPI.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        UserAPI service = retrofit.create(UserAPI.class);
-        Call<User> requestUser = service.authenticate(username, password);
-        requestUser.enqueue(new Callback<User>() {
-
+    public void login(String username, String password){
+        Service.Factory.getInstance().postlogin(username, password).enqueue(new Callback<Login>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                showProgress(false);
-                if (!response.isSuccessful()){
-                    Log.i(TAG, "Error: " + response.code());
-                }
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                if(!response.isSuccessful())
+                    Log.i(TAG, "!response.isSuccessful(): " + response.body() + ", errorBody: " + response.errorBody() + ", CODE: " + response.code());
                 else {
-                    user = response.body();
-                    if (user.isLogin == 1) {
-                        Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-
-                        SharedPreferences.Editor editor = Settings.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        editor.putString("USER", json);
-                        editor.putBoolean("IsLoggedIn", true);
-                        editor.commit();
-                        StartMainActivity(user);
-                    }
-                    else {
-                        Log.i(TAG, "result false");
-                        Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_LONG).show();
-                    }
+                    Log.i(TAG, "Username: " + response.body().user.username + ", Password: " + response.body().user.password + ", Message: " + response.body().alert.message + ", Response: " + response.code());
+                    //Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.i(TAG,"Error: " + t.getMessage());
+            public void onFailure(Call<Login> call, Throwable t) {
+                Log.i(TAG,"onFailure: " + t.getMessage());
             }
         });
     }
 
+    /**
+
+    Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+
+    SharedPreferences.Editor editor = Settings.edit();
+    Gson gson = new Gson();
+    String json = gson.toJson(user);
+    editor.putString("USER", json);
+    editor.putBoolean("IsLoggedIn", true);
+    editor.commit();
+    StartMainActivity(user);
+
+    /**/
     public void StartMainActivity(User u)
     {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
