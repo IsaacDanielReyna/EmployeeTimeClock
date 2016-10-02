@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.isaacreyna.employeetimeclock.interfaces.UserAPI;
 import com.isaacreyna.employeetimeclock.models.Course;
 import com.isaacreyna.employeetimeclock.models.Instructor;
 import com.isaacreyna.employeetimeclock.models.UdacityCatalog;
@@ -47,33 +46,6 @@ public class InitialActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 StartLoginActivity();
-            }
-        });
-    }
-
-    private void startUser() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserAPI.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //16:24
-                .build();
-        UserAPI service = retrofit.create(UserAPI.class);
-        Call<User> requestUser = service.authenticate("john", "foobar");
-        requestUser.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful()){
-                    Log.i(TAG, "Error: " + response.code());
-                }
-                else {
-                    // Request returned with success.
-                    User user = response.body(); // json goes in here?
-                    Log.i(TAG, "Result: " + user.isLogin);
-                    Toast.makeText(InitialActivity.this, "Result: " + user.isLogin, Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.i(TAG,"Error: " + t.getMessage());
             }
         });
     }
