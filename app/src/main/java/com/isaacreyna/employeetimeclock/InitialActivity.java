@@ -10,11 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.isaacreyna.employeetimeclock.models.Course;
-import com.isaacreyna.employeetimeclock.models.Instructor;
-import com.isaacreyna.employeetimeclock.models.UdacityCatalog;
-import com.isaacreyna.employeetimeclock.interfaces.User;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,41 +45,6 @@ public class InitialActivity extends AppCompatActivity {
         });
     }
 
-
-    private void startUdacity() {
-        //RETROFIT
-        Toast.makeText(this, "LOADING RETROFIT SHIT", Toast.LENGTH_LONG).show();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UdacityService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //16:24
-                .build();
-        UdacityService service = retrofit.create(UdacityService.class);
-        Call<UdacityCatalog> requestCatalog = service.listCatalog();
-        requestCatalog.enqueue(new Callback<UdacityCatalog>() {
-            @Override
-            public void onResponse(Call<UdacityCatalog> call, Response<UdacityCatalog> response) {
-                if (!response.isSuccessful()){
-                    Log.i(TAG, "Error: " + response.code());
-                }
-                else {
-                    // Request returned with success.
-                    UdacityCatalog catalog = response.body(); // json goes in here?
-                    for (Course c : catalog.courses){
-                        Log.i(TAG, String.format("%s: %s", c.title, c.subtitle));
-                        for(Instructor i : c.instructors){
-                            Log.i(TAG, i.name);
-                        }
-
-                        Log.i(TAG,"---------");
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<UdacityCatalog> call, Throwable t) {
-                Log.i(TAG,"Error: " + t.getMessage());
-            }
-        });
-    }
 
     void IsLoggedIn()
     {

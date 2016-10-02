@@ -1,4 +1,4 @@
-package com.isaacreyna.employeetimeclock.interfaces;
+package com.isaacreyna.employeetimeclock.models;
 
 /**
  * Created by Isaac on 9/28/2016.

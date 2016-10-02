@@ -12,10 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.isaacreyna.employeetimeclock.interfaces.Login;
+import com.isaacreyna.employeetimeclock.models.Login;
 import com.isaacreyna.employeetimeclock.interfaces.Service;
-import com.isaacreyna.employeetimeclock.interfaces.User;
+import com.isaacreyna.employeetimeclock.models.User;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,12 +57,35 @@ public class LoginActivity extends AppCompatActivity {
 
         String username = username_field.getText().toString();
         String password = password_field.getText().toString();
+        login(username, password);
 
         showProgress(true);
-
-        //TODO: username and password validation (too short, missing symbols, etc.)
-        login(username, password);
     }
+
+    public void login2(String username, String password){
+        Service.Factory.getInstance().getlogin(username, password).enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                if(!response.isSuccessful())
+                    Log.i(TAG, "!response.isSuccessful(): " + response.body() + ", errorBody: " + response.errorBody() + ", CODE: " + response.code());
+                else {
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, "GET: " + response.body().alert.messages.size() , Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "Username: " + response.body().user.username + ", Password: " + response.body().user.password + ", Message: " + response.body().alert.messages.size() + ", Response: " + response.code());
+
+                    for(String m : response.body().alert.messages)
+                    {
+                        Log.i(TAG, "Message: " + m);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Login> call, Throwable t) {
+                Log.i(TAG,"onFailure: " + t.getMessage());
+            }
+        });
+    }
+
     public void login(String username, String password){
         Service.Factory.getInstance().postlogin(username, password).enqueue(new Callback<Login>() {
             @Override
@@ -67,8 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                 if(!response.isSuccessful())
                     Log.i(TAG, "!response.isSuccessful(): " + response.body() + ", errorBody: " + response.errorBody() + ", CODE: " + response.code());
                 else {
-                    Log.i(TAG, "Username: " + response.body().user.username + ", Password: " + response.body().user.password + ", Message: " + response.body().alert.message + ", Response: " + response.code());
-                    //Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_LONG).show();
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, "POST: " + response.body().alert.messages , Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "Username: " + response.body().user.username + ", Password: " + response.body().user.password + ", Message: " + response.body().alert.messages.size() + ", Response: " + response.code());
+                    for(String m : response.body().alert.messages)
+                    {
+                        Log.i(TAG, "Message: " + m);
+                    }
                 }
             }
             @Override
@@ -79,18 +110,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-
-    Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-
-    SharedPreferences.Editor editor = Settings.edit();
-    Gson gson = new Gson();
-    String json = gson.toJson(user);
-    editor.putString("USER", json);
-    editor.putBoolean("IsLoggedIn", true);
-    editor.commit();
-    StartMainActivity(user);
-
-    /**/
+     Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+     SharedPreferences.Editor editor = Settings.edit();
+     Gson gson = new Gson();
+     String json = gson.toJson(user);
+     editor.putString("USER", json);
+     editor.putBoolean("IsLoggedIn", true);
+     editor.commit();
+     StartMainActivity(user);
+     /**/
     public void StartMainActivity(User u)
     {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -109,15 +137,15 @@ public class LoginActivity extends AppCompatActivity {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             /** // HIDE LOGIN FORM?
+             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+             show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
+            }
             });
-            /**/
+             /**/
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(

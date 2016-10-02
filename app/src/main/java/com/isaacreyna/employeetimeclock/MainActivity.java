@@ -21,9 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.isaacreyna.employeetimeclock.interfaces.User;
-
-import org.w3c.dom.Text;
+import com.isaacreyna.employeetimeclock.models.User;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ExampleFragment.OnFragmentInteractionListener {

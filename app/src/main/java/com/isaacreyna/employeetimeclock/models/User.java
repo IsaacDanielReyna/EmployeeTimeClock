@@ -1,4 +1,4 @@
-package com.isaacreyna.employeetimeclock.interfaces;
+package com.isaacreyna.employeetimeclock.models;
 
 import android.util.Log;
 
