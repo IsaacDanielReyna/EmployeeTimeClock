@@ -14,7 +14,6 @@ import retrofit2.http.Query;
 public interface Service {
     public static final String BASE_URL = "http://www.compuplanet.net/";
 
-    // Todo: Add more methods
     @FormUrlEncoded @POST("api/index.php") Call<Login> postlogin(@Field("username") String u, @Field("password") String p);
     @GET("api/index.php") Call<Login> getlogin(@Query("username") String u, @Query("password") String p);
 
