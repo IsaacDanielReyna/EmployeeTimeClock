@@ -10,6 +10,7 @@ public class User {
     public String email;
     public String token;
     public String session;
+    public String displayname;
 }
 
 

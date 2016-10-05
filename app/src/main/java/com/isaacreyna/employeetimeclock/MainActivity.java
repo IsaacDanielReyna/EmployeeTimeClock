@@ -58,14 +58,18 @@ public class MainActivity extends AppCompatActivity
         String json = Settings.getString("USER", "");
         User user = gson.fromJson(json, User.class);
         Log.i("APISYSTEM: ", user.username + ", token: " + user.token + ", session: " + user.session );
-        setNavHeader();
+        setNavHeader(user);
         loadTimeClock();
     }
 
-    void setNavHeader(){
+    void setNavHeader(User user){
         View navView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, null); //navigation header menu layout
-        TextView textView = (TextView)   navView.findViewById(R.id.fullname);
-        textView.setText("Isaac Daniel Reyna");
+
+        TextView name = (TextView) navView.findViewById(R.id.fullname);
+        name.setText(user.displayname);
+
+        TextView email = (TextView) navView.findViewById(R.id.email);
+        email.setText(user.email);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
