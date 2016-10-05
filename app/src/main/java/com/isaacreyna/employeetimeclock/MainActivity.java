@@ -53,12 +53,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // TODO: Work on this part //////////////////////////////////////////////////////////////////////////////////
-
         Settings = getApplicationContext().getSharedPreferences("Settings", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = Settings.getString("USER", "");
         User user = gson.fromJson(json, User.class);
-        Log.i("APISYSTEM", user.username );
+        Log.i("APISYSTEM: ", user.username + ", token: " + user.token + ", session: " + user.session );
         setNavHeader();
         loadTimeClock();
     }

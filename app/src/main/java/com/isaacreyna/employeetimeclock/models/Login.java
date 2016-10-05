@@ -5,6 +5,7 @@ package com.isaacreyna.employeetimeclock.models;
  */
 
 public class Login {
+    public Boolean result;
     public User user;
     public Alert alert;
 }
