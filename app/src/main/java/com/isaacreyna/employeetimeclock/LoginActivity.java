@@ -15,10 +15,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.isaacreyna.employeetimeclock.models.Company.Result;
 import com.isaacreyna.employeetimeclock.models.Login;
 import com.isaacreyna.employeetimeclock.interfaces.Service;
 import com.isaacreyna.employeetimeclock.models.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -76,41 +78,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(String username, String password){
-        Service.Factory.getInstance().postlogin(username, password).enqueue(new Callback<Login>() {
+        HashMap<String,String> fields = new HashMap<String,String>();
+        fields.put("option","user");//required
+        fields.put("task","login");//required
+        fields.put("username",username);
+        fields.put("password",password);
+        Service.Factory.getInstance().login(fields).enqueue(new Callback<Login>() {
             @Override
             public void onResponse(Call<Login> call, Response<Login> response) {
-                if(!response.isSuccessful())
-                    Log.i(TAG, "Unsuccessful Response: " + response.code());
-                else {
-                    showProgress(false);
-
-                    String message = "";
-                    for(String m : response.body().alert.messages)
-                    {
-                        message += m + " ";
-                        Log.i(TAG, "Message: " + m);
-                    }
-
-                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-
-                    if (response.body().result) {
-                        User user = response.body().user;
-                        Toast.makeText(LoginActivity.this, "Success: " + user.username, Toast.LENGTH_LONG).show();
-                        /**/
-                        SharedPreferences.Editor editor = Settings.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        editor.putString("USER", json);
-                        editor.putBoolean("IsLoggedIn", true);
-                        editor.commit();
-                        StartMainActivity(user);
-                        /**/
-                    }
+                if (response.body().result)
+                {
+                    User user = response.body().user;
+                    SharedPreferences.Editor editor = Settings.edit();
+                    String json = new Gson().toJson(user);
+                    editor.putString("user", json);
+                    editor.putBoolean("IsLoggedIn", true);
+                    editor.commit();
+                    StartMainActivity(user);
+                }
+                else
+                {
+                    Toast.makeText(LoginActivity.this, response.body().messages.toString(), Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
-                Log.i(TAG,"onFailure: " + t.getMessage());
+
             }
         });
     }
@@ -132,17 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            /** // HIDE LOGIN FORM?
-             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-             show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-            });
-             /**/
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(

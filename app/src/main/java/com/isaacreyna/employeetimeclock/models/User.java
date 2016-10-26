@@ -9,8 +9,16 @@ public class User {
     public String username;
     public String email;
     public String token;
-    public String session;
-    public String displayname;
+    public String photo;
+    public String first_name;
+    public String middle_name;
+    public String last_name;
+    public String phone_number;
+    public String address;
+    public String city;
+    public String state;
+    public String zip_code;
+    public String default_company;
 }
 
 

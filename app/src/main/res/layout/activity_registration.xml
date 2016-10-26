@@ -77,39 +77,21 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/firstname"
-                    android:hint="First Name" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content"></android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/middlename"
-                    android:hint="Middle Name (optional)" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content"></android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lastname"
-                    android:hint="Last Name" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content"></android.support.design.widget.TextInputLayout>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Register"
-                android:id="@+id/register"
+                android:id="@+id/button_register"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginTop="25dp" />
 

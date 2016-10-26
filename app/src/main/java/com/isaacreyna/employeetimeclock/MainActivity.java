@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity
         // TODO: Work on this part //////////////////////////////////////////////////////////////////////////////////
         Settings = getApplicationContext().getSharedPreferences("Settings", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = Settings.getString("USER", "");
+        String json = Settings.getString("user", "");
         User user = gson.fromJson(json, User.class);
-        Log.i("APISYSTEM: ", user.username + ", token: " + user.token + ", session: " + user.session );
+        Log.i("APISYSTEM: ", user.username + ", token: " + user.token );
         setNavHeader(user);
         loadTimeClock();
     }
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         View navView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, null); //navigation header menu layout
 
         TextView name = (TextView) navView.findViewById(R.id.fullname);
-        name.setText(user.displayname);
+        name.setText(user.first_name);
 
         TextView email = (TextView) navView.findViewById(R.id.email);
         email.setText(user.email);
@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity
             loadTimeClock();
         } else if (id == R.id.nav_timesheet) {
             loadTimeSheets();
+        } else if (id == R.id.nav_companies) {
+            loadCompanies();
         } else if (id == R.id.ic_logout){
             logout();
             Log.i("APISYSTEM", "loggingout");
@@ -144,16 +146,24 @@ public class MainActivity extends AppCompatActivity
 
     void loadTimeClock()
     {
-        TimeClockFragment timeClockFragment = new TimeClockFragment();
+        TimeClockFragment fragment = new TimeClockFragment();
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_layout, timeClockFragment, timeClockFragment.getTag()).commit();
+        manager.beginTransaction().replace(R.id.fragment_layout, fragment, fragment.getTag()).commit();
     }
 
     void loadTimeSheets(){
-        TimeSheetsFragment timeClockFragment = new TimeSheetsFragment();
+        TimeSheetsFragment fragment = new TimeSheetsFragment();
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_layout, timeClockFragment, timeClockFragment.getTag()).commit();
+        manager.beginTransaction().replace(R.id.fragment_layout, fragment, fragment.getTag()).commit();
     }
+
+
+    void loadCompanies(){
+        CompaniesFragment fragment = new CompaniesFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_layout, fragment, fragment.getTag()).commit();
+    }
+
     void logout()
     {
         SharedPreferences Settings;

@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_assignment_black_24px"
             android:title="Time Sheets" />
         <item
-            android:id="@+id/nav_company"
+            android:id="@+id/nav_companies"
             android:icon="@drawable/ic_business_black_24px"
-            android:title="Company" />6
+            android:title="Companies" />6
 
     </group>
 
