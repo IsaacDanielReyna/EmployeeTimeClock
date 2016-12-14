@@ -33,6 +33,7 @@ import com.squareup.picasso.Target;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ExampleFragment.OnFragmentInteractionListener {
     private SharedPreferences Settings;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +42,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -63,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         Settings = getApplicationContext().getSharedPreferences("Settings", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = Settings.getString("user", "");
-        User user = gson.fromJson(json, User.class);
+        user = gson.fromJson(json, User.class);
         Log.i("APISYSTEM: ", user.username + ", token: " + user.token );
         setNavHeader(user);
         loadTimeClock();
@@ -184,7 +178,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     void loadTimeSheets(){
+        // Allows to pass vars to fragment
+        Bundle bundle = new Bundle();
+        bundle.putString("company", user.default_company+"");
+        bundle.putString("token", user.token);
+
+        // Create and Start fragment
         TimeSheetsFragment fragment = new TimeSheetsFragment();
+        fragment.setArguments(bundle);
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_layout, fragment, fragment.getTag()).commit();
     }
